@@ -47,4 +47,4 @@ Lets try to call our server through proxy:
   Person me = script.createPerson("Bane", "Stojkovic");
 }}}
 
-This call will post the two parameters to our {{{createPerson.php}}} script, read the result and deserialize it to {{{Person}} object.
+This call will post the two parameters to our {{{createPerson.php}}} script, read the result and deserialize it to {{{Person}}} object.
