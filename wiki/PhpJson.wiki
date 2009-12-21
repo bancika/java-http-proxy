@@ -11,7 +11,7 @@ In the example below we have a script named {{{createPerson.php}}} that takes tw
 
 {{{
 <?php
-  echo "{\"Person\":{\"first\":\".$_POST["first"]."\",\"last\":\".$_POST["last"]."\"}}"
+  echo "{\"Person\":{\"first\":\"".$_POST["first"]."\",\"last\":\"".$_POST["last"]."\"}}"
 ?>
 }}}
 
