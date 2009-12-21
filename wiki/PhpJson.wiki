@@ -1,0 +1,27 @@
+#summary This page describes using ProxyFactory to invoke PHP scripts and automatically deserialize server response from JSON format.
+
+= Introduction =
+
+Suppose we have a PHP script on the server that does something and outputs the result in JSON format. Our goal is to write a native Java wrapper around that script that allows us to call it from Java application and get the result as Java object.
+
+= Details =
+
+In the example below we have a script that takes two parameters - first name and last name and outputs Person object. PHP code looks something like this:
+
+{{{
+<?php
+  echo "{\"Person\":{\"first\":\".$_POST["first"]."\",\"last\":\".$_POST["last"]."\"}}"
+?>
+}}}
+
+{{{
+class Person {
+  String first;
+  String last;
+}
+}}}
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
