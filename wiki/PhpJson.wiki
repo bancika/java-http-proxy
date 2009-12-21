@@ -1,5 +1,5 @@
 #summary This page describes using ProxyFactory to invoke PHP scripts and automatically deserialize server response from JSON format.
-#labels Featured,Phase-Implementation
+#labels Featured,Phase-Deploy
 
 = Introduction =
 
