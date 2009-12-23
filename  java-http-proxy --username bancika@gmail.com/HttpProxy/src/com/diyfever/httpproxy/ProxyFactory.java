@@ -101,9 +101,6 @@ public class ProxyFactory {
 				out
 						.println("    java.util.Map<String, Object> params = new java.util.HashMap<String, Object>();");
 				for (int i = 0; i < method.getParameterTypes().length; i++) {
-					if (i > 0) {
-						out.print(", ");
-					}
 					String paramName = extractParameterName(method, i);
 					out.println("    params.put(\"" + paramName + "\", "
 							+ paramName + ");");
