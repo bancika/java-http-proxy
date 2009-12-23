@@ -1,4 +1,4 @@
-<project name="HttpProxy" basedir="." default="jar">
+<project name="http-proxy" basedir="." default="jar">
 	<property name="src.dir" value="src" />
 
 	<property name="lib.dir" value="${basedir}/lib" />
