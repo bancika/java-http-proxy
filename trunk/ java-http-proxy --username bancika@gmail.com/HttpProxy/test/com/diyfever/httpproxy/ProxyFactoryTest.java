@@ -25,16 +25,14 @@ public class ProxyFactoryTest {
 
 	@Test
 	public void testCreateProxyString() {
-		ITestProxy proxy = factory.createProxy(ITestProxy.class,
-				"doesn't matter");
+		ITestProxy proxy = factory.createProxy(ITestProxy.class, "doesn't matter");
 		String name = "bancika";
 		assertEquals(name, proxy.test(name));
 	}
 
 	@Test
 	public void testCreateProxyStream() throws IOException {
-		ITestProxy proxy = factory.createProxy(ITestProxy.class,
-				"doesn't matter");
+		ITestProxy proxy = factory.createProxy(ITestProxy.class, "doesn't matter");
 		String name = "bancika";
 		InputStream stream = proxy.testStream(name);
 		byte[] buff = new byte[256];

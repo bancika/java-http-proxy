@@ -29,8 +29,7 @@ public class PhpFlatProxy implements IFlatProxy {
 	private static final Logger LOG = Logger.getLogger(PhpFlatProxy.class);
 
 	@Override
-	public InputStream invoke(String url, String methodName,
-			Map<String, Object> params) {
+	public InputStream invoke(String url, String methodName, Map<String, Object> params) {
 		InputStream serverInput;
 		try {
 			// Flatten params map into an array
@@ -55,8 +54,7 @@ public class PhpFlatProxy implements IFlatProxy {
 	}
 
 	@Override
-	public Object invokeAndDeserialize(String url, String methodName,
-			Map<String, Object> params) {
+	public Object invokeAndDeserialize(String url, String methodName, Map<String, Object> params) {
 		InputStream stream = invoke(url, methodName, params);
 		if (stream == null) {
 			return null;

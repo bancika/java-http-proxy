@@ -24,8 +24,7 @@ public interface IFlatProxy {
 	 *            parameters.
 	 * @return streamed server response
 	 */
-	public InputStream invoke(String url, String methodName,
-			Map<String, Object> params);
+	public InputStream invoke(String url, String methodName, Map<String, Object> params);
 
 	/**
 	 * Invokes the specified method on the specified url and returns
@@ -41,6 +40,5 @@ public interface IFlatProxy {
 	 *            parameters.
 	 * @return deserialized server response
 	 */
-	public Object invokeAndDeserialize(String url, String methodName,
-			Map<String, Object> params);
+	public Object invokeAndDeserialize(String url, String methodName, Map<String, Object> params);
 }
