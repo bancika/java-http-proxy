@@ -1,6 +1,7 @@
 package com.diyfever.httpproxy;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -41,7 +42,8 @@ public class ProxyFactory {
 		super();
 		this.flatProxy = flatProxy;
 
-		this.fileClassLoader = new FileClassLoader(ToolProvider.getSystemToolClassLoader());
+		this.fileClassLoader = new FileClassLoader(
+				ToolProvider.getSystemToolClassLoader());
 		this.compiler = ToolProvider.getSystemJavaCompiler();
 	}
 
@@ -65,20 +67,23 @@ public class ProxyFactory {
 			return null;
 		}
 		String interfaceName = clazz.getName();
-		String newClassName = interfaceName.substring(interfaceName.lastIndexOf(".") + 1) + "Impl";
+		String newClassName = interfaceName.substring(interfaceName
+				.lastIndexOf(".") + 1) + "Impl";
 		try {
 			LOG.info("Creating temp class code");
 			StringWriter writer = new StringWriter();
 			PrintWriter out = new PrintWriter(writer);
 
-			out.println("public class " + newClassName + " implements " + interfaceName + " {\n");
+			out.println("public class " + newClassName + " implements "
+					+ interfaceName + " {\n");
 			out.println("  private " + IFlatProxy.class.getName() + " proxy;\n");
 			// Generate a constructor
-			out.println("  public " + newClassName + "(" + IFlatProxy.class.getName()
+			out.println("  public " + newClassName + "("
+					+ IFlatProxy.class.getName()
 					+ " proxy) { this.proxy = proxy; }\n");
 			for (Method method : clazz.getDeclaredMethods()) {
-				out.print("  public " + method.getReturnType().getName() + " " + method.getName()
-						+ "(");
+				out.print("  public " + method.getReturnType().getName() + " "
+						+ method.getName() + "(");
 				for (int i = 0; i < method.getParameterTypes().length; i++) {
 					if (i > 0) {
 						out.print(", ");
@@ -89,11 +94,11 @@ public class ProxyFactory {
 				out.print(") {\n");
 
 				// Put together the parameter map.
-				out
-						.println("    java.util.Map<String, Object> params = new java.util.HashMap<String, Object>();");
+				out.println("    java.util.Map<String, Object> params = new java.util.HashMap<String, Object>();");
 				for (int i = 0; i < method.getParameterTypes().length; i++) {
 					String paramName = extractParameterName(method, i);
-					out.println("    params.put(\"" + paramName + "\", " + paramName + ");");
+					out.println("    params.put(\"" + paramName + "\", "
+							+ paramName + ");");
 				}
 
 				// Call the proxy
@@ -103,9 +108,9 @@ public class ProxyFactory {
 				} else {
 					factoryMethodName = "invokeAndDeserialize";
 				}
-				out.println("    return (" + method.getReturnType().getName() + ") proxy."
-						+ factoryMethodName + "(\"" + url + "\", \"" + method.getName()
-						+ "\", params);");
+				out.println("    return (" + method.getReturnType().getName()
+						+ ") proxy." + factoryMethodName + "(\"" + url
+						+ "\", \"" + method.getName() + "\", params);");
 				out.println("  }\n");
 			}
 			out.print("}\n");
@@ -116,15 +121,14 @@ public class ProxyFactory {
 
 			LOG.info("Compiling temp class");
 			DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-			Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
-
-			// Create temp directory if it doesn't exist.
-			File tempDir = new File("temp/");
-			if (!tempDir.exists()) {
-				tempDir.mkdir();
-			}
-			JavaCompiler.CompilationTask task = compiler.getTask(null, null, diagnostics, Arrays
-					.asList(new String[] { "-d", "temp" }), null, compilationUnits);
+			Iterable<? extends JavaFileObject> compilationUnits = Arrays
+					.asList(file);
+			 
+			File tempDir = createTempDirectory();
+	
+			JavaCompiler.CompilationTask task = compiler.getTask(null, null,
+					diagnostics, Arrays.asList(new String[] { "-d", tempDir.getAbsolutePath() }),
+					null, compilationUnits);
 			boolean success = task.call();
 			if (success) {
 				LOG.info("Successfully compiled code");
@@ -137,8 +141,8 @@ public class ProxyFactory {
 			}
 
 			T instance = (T) fileClassLoader.createClass(
-					new File("temp/" + newClassName + ".class")).getConstructors()[0]
-					.newInstance(flatProxy);
+					new File(tempDir.getAbsolutePath() + "/" + newClassName + ".class"))
+					.getConstructors()[0].newInstance(flatProxy);
 			LOG.info("Successfully instantiated proxy");
 			return instance;
 		} catch (Exception e) {
@@ -155,8 +159,27 @@ public class ProxyFactory {
 				return ((ParamName) annotation).value();
 			}
 		}
-		LOG.warn("@" + ParamName.class.getSimpleName() + " annotation not present for method "
-				+ method.getName() + ", at index " + parameterIndex);
+		LOG.warn("@" + ParamName.class.getSimpleName()
+				+ " annotation not present for method " + method.getName()
+				+ ", at index " + parameterIndex);
 		return "param" + parameterIndex;
+	}
+
+	public static File createTempDirectory() throws IOException {
+		final File temp;
+
+		temp = File.createTempFile("temp", Long.toString(System.nanoTime()));
+
+		if (!(temp.delete())) {
+			throw new IOException("Could not delete temp file: "
+					+ temp.getAbsolutePath());
+		}
+
+		if (!(temp.mkdir())) {
+			throw new IOException("Could not create temp directory: "
+					+ temp.getAbsolutePath());
+		}
+
+		return (temp);
 	}
 }
