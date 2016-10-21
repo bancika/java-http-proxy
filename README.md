@@ -51,7 +51,8 @@ interface MyScript() { Person createPerson(@ParamName("first") String first, @Pa
 <p align="justify">Note that method name matches with the script name and parameter annotations match script parameters read through POST. This is necessary because we are generating HTTP requests based on this interface. Now we are ready to create a proxy.</p>
 
 ```javascript
-ProxyFactory factory = new ProxyFactory(new PhpFlatProxy()); MyScript script = factory.createProxy(MyScript.class, "http://some-server.com/somePath");
+ProxyFactory factory = new ProxyFactory(new PhpFlatProxy()); 
+MyScript script = factory.createProxy(MyScript.class, "http://some-server.com/somePath");
 ```
 
 <p align="justify">This will create an instance of MyScript interface and use it to invoke PHP scripts located under http://some-server.com/somePath. For our example, calls to MyScript.createPerson will be redirected to http://some-server.com/somePath/createPerson.php and method parameter values will be passed through POST. Lets try to call our server through proxy:</p>
