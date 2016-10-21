@@ -116,7 +116,7 @@ public class ProxyFactory {
 			out.print("}\n");
 
 			String code = writer.toString();
-			LOG.debug("Generated code:\n" + code);
+//			LOG.debug("Generated code:\n" + code);
 			JavaFileObject file = new JavaStringSource(newClassName, code);
 
 			LOG.info("Compiling temp class");
