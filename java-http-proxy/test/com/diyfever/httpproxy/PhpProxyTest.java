@@ -16,39 +16,39 @@ import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class PhpProxyTest {
 
-	static final String URL = "http://diyfever.x10hosting.com";
+  static final String URL = "http://diyfever.x10hosting.com";
 
-	PhpFlatProxy proxy;
+  PhpFlatProxy proxy;
 
-	@Before
-	public void setUp() throws Exception {
-		proxy = new PhpFlatProxy();
-	}
+  @Before
+  public void setUp() throws Exception {
+    proxy = new PhpFlatProxy();
+  }
 
-	@Test
-	public void testInvoke() throws IOException {
-		String name = "bancika";
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("name", name);
-		InputStream stream = proxy.invoke(URL, "test", params);
-		byte[] buff = new byte[256];
-		int length = stream.read(buff);
-		String result = new String(buff, 0, length);
+  @Test
+  public void testInvoke() throws IOException {
+    String name = "bancika";
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put("name", name);
+    InputStream stream = proxy.invoke(URL, "test", params);
+    byte[] buff = new byte[256];
+    int length = stream.read(buff);
+    String result = new String(buff, 0, length);
 
-		XStream xstream = new XStream(new JettisonMappedXmlDriver());
-		xstream.setMode(XStream.NO_REFERENCES);
-		String expected = xstream.toXML(name);
+    XStream xstream = new XStream(new JettisonMappedXmlDriver());
+    xstream.setMode(XStream.NO_REFERENCES);
+    String expected = xstream.toXML(name);
 
-		assertEquals(expected, result);
-	}
+    assertEquals(expected, result);
+  }
 
-	@Test
-	public void testInvokeAndDeserialize() {
-		String name = "bancika";
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("name", name);
-		Object result = proxy.invokeAndDeserialize(URL, "test", params);
+  @Test
+  public void testInvokeAndDeserialize() {
+    String name = "bancika";
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put("name", name);
+    Object result = proxy.invokeAndDeserialize(URL, "test", params);
 
-		assertEquals(name, result);
-	}
+    assertEquals(name, result);
+  }
 }

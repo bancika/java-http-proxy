@@ -11,9 +11,9 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ParamName {
 
-	/**
-	 * @return parameter name, this will be used to put together server request
-	 *         and dynamically create code.
-	 */
-	String value();
+  /**
+   * @return parameter name, this will be used to put together server request and dynamically create
+   *         code.
+   */
+  String value();
 }

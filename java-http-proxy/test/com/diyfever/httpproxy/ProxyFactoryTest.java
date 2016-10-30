@@ -15,34 +15,34 @@ import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 public class ProxyFactoryTest {
 
-	private ProxyFactory factory;
+  private ProxyFactory factory;
 
-	@Before
-	public void setUp() throws Exception {
-		BasicConfigurator.configure();
-		factory = new ProxyFactory(new MockFlatProxy());
-	}
+  @Before
+  public void setUp() throws Exception {
+    BasicConfigurator.configure();
+    factory = new ProxyFactory(new MockFlatProxy());
+  }
 
-	@Test
-	public void testCreateProxyString() {
-		ITestProxy proxy = factory.createProxy(ITestProxy.class, "doesn't matter");
-		String name = "bancika";
-		assertEquals(name, proxy.test(name));
-	}
+  @Test
+  public void testCreateProxyString() {
+    ITestProxy proxy = factory.createProxy(ITestProxy.class, "doesn't matter");
+    String name = "bancika";
+    assertEquals(name, proxy.test(name));
+  }
 
-	@Test
-	public void testCreateProxyStream() throws IOException {
-		ITestProxy proxy = factory.createProxy(ITestProxy.class, "doesn't matter");
-		String name = "bancika";
-		InputStream stream = proxy.testStream(name);
-		byte[] buff = new byte[256];
-		int length = stream.read(buff);
-		String result = new String(buff, 0, length);
+  @Test
+  public void testCreateProxyStream() throws IOException {
+    ITestProxy proxy = factory.createProxy(ITestProxy.class, "doesn't matter");
+    String name = "bancika";
+    InputStream stream = proxy.testStream(name);
+    byte[] buff = new byte[256];
+    int length = stream.read(buff);
+    String result = new String(buff, 0, length);
 
-		XStream xstream = new XStream(new JettisonMappedXmlDriver());
-		xstream.setMode(XStream.NO_REFERENCES);
-		String expected = xstream.toXML(name);
+    XStream xstream = new XStream(new JettisonMappedXmlDriver());
+    xstream.setMode(XStream.NO_REFERENCES);
+    String expected = xstream.toXML(name);
 
-		assertEquals(expected, result);
-	}
+    assertEquals(expected, result);
+  }
 }

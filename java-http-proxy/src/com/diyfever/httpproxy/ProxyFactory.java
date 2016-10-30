@@ -76,7 +76,7 @@ public class ProxyFactory {
         // Put together the parameter map.
         out.println("    java.util.Map<String, Object> params = new java.util.HashMap<String, Object>();");
         for (int i = 0; i < method.getParameterTypes().length; i++) {
-          String paramName = extractParameterName(method, i);
+          String paramName = extractParameterName(method, i);          
           out.println("    params.put(\"" + paramName + "\", " + paramName + ");");
         }
 
@@ -98,7 +98,7 @@ public class ProxyFactory {
       ISimpleCompiler compiler = new CompilerFactory().newSimpleCompiler();
       compiler.cook(code);
       T instance = (T) compiler.getClassLoader().loadClass(newClassName).getConstructors()[0].newInstance(flatProxy);
-    
+
       LOG.info("Successfully instantiated proxy");
       return instance;
     } catch (Exception e) {
