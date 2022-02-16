@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 
 /**
  * {@link IFlatProxy} implementation for PHP. Method names are interpreted as PHP script names,
@@ -64,6 +65,7 @@ public class PhpFlatProxy implements IFlatProxy {
     }
     // Deserialize the stream
     XStream xstream = new XStream(new JettisonMappedXmlDriver());
+    xstream.addPermission(AnyTypePermission.ANY);
     xstream.setMode(XStream.NO_REFERENCES);
     return xstream.fromXML(stream);
   }
